@@ -1,10 +1,8 @@
 import { FaChevronLeft, FaPlus } from "react-icons/fa";
-import { useAppSelector } from "@/store/hooks";
-import Order from "./Order";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { images } from "@/constants";
+import Image from "next/image";
 
 const CheckOutPage = () => {
   const router = useRouter();
