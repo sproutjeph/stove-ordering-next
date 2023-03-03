@@ -5,12 +5,11 @@ import { useVenueData } from "@/queryHooks/useVenueData";
 import { useMenuItem } from "@/queryHooks/useMenuItem";
 import { ReturnData, VenueData } from "@/utils/types";
 import { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
 import { images } from "@/constants";
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 type MenuNetworkData = {
   menuData: ReturnData;
   isLoading: boolean;
@@ -23,14 +22,22 @@ type VenueNetworkData = {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [showStoreInfoModal, setShowStoreInfoModal] = useState(false);
+  const { venueId, terminalId, timeZone } = router.query;
+  const [vId, setVid] = useState<number>();
+  useEffect(() => {
+    setVid(Number(venueId));
+  }, [venueId]);
+  console.log(venueId);
+
   const { menuData, isLoading, isSuccess }: MenuNetworkData = useMenuItem();
 
   const {
     venueData,
     isLoading: venueDataLoading,
     isSuccess: venueDataIsSuccess,
-  }: VenueNetworkData = useVenueData();
+  }: VenueNetworkData = useVenueData(vId, vId);
 
   useEffect(() => {
     if (isSuccess) {
@@ -74,7 +81,6 @@ export default function Home() {
       (item2) => item2.menucatid === item.menucat
     ),
   }));
-  console.log(menuCategoryInfo);
 
   return (
     <>
@@ -175,7 +181,7 @@ export default function Home() {
 
             <div className="mt-10 ">
               <ul className="grid grid-cols-1 gap-4 mx-3 md:grid-cols-3 intro-y">
-                {menuCategoryInfo.map((item, i) => {
+                {menuCategoryInfo?.map((item, i) => {
                   if (category.id === 1111) {
                     return (
                       <>
@@ -185,7 +191,7 @@ export default function Home() {
                           </h1>
                         )}
 
-                        {item.items.map((item2, i2) => (
+                        {item.items?.map((item2, i2) => (
                           <MenuItem
                             key={item2.itemid}
                             item={item2}
@@ -195,7 +201,7 @@ export default function Home() {
                       </>
                     );
                   } else if (item.id === category.id) {
-                    return item.items.map((item2, i2) => (
+                    return item.items?.map((item2, i2) => (
                       <MenuItem key={item2.itemid} item={item2} index={i2} />
                     ));
                   }
