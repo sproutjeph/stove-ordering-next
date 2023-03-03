@@ -72,7 +72,7 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
         }}
       >
         <FaChevronLeft />
-        <h6>{`${venueData?.[0]?.venuename}'s Menu`}</h6>
+        <h6 className="select-none">{`${venueData?.[0]?.venuename}'s Menu`}</h6>
       </div>
 
       <div className="gap-8 px-4 mx-auto mb-40 mt-14 max-w-7xl md:flex">

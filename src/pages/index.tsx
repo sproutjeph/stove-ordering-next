@@ -132,8 +132,8 @@ export default function Home() {
             <div
               className={`${
                 sticky &&
-                "fixed top-[4.16rem] md:top-[4.54rem] z-50 bg-white w-full px-0 mx-0"
-              }  scrollbar-hide max-w-[79.5rem] mx-2`}
+                "fixed top-[4.16rem] md:top-[4.54rem] z-50 bg-white w-full px-0"
+              }  scrollbar-hide max-w-[79.5rem] px-2`}
             >
               {/* Search bar */}
               <div className="flex items-center">
