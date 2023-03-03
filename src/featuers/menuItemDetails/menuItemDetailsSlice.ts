@@ -3,27 +3,27 @@ import { ICartItem, Option, ReturnData } from "@/utils/types";
 
 let data;
 let initialSelectedItemData;
-let initialItemIndex;
+let initialItemId: string | null;
 if (typeof window !== "undefined") {
   data = localStorage.getItem("menuItemData");
-  initialItemIndex = localStorage.getItem("itemIndex");
+  initialItemId = localStorage.getItem("itemId");
 }
 
-if (initialItemIndex) {
-  initialItemIndex = JSON.parse(initialItemIndex);
+if (initialItemId!) {
+  initialItemId = JSON.parse(initialItemId);
 }
 
 if (data) {
   let mData: ReturnData = JSON.parse(data);
-  initialSelectedItemData = mData.menuItems[
-    Number(initialItemIndex)
-  ] as ICartItem;
+  initialSelectedItemData = mData.menuItems.find(
+    (item) => item.itemid === Number(initialItemId)
+  ) as ICartItem;
 }
 
 type MenuItemDetailsState = {
   menuData: ReturnData;
   selectedItemData?: ICartItem;
-  itemIndex: number;
+  itemId: number;
   totalItemPrice: number;
   allAddedMods: Option[];
 };
@@ -35,7 +35,7 @@ const initialState: MenuItemDetailsState = {
     qty: 1,
     addedModifiers: [],
   } as ICartItem,
-  itemIndex: Number(initialItemIndex),
+  itemId: Number(initialItemId!),
   totalItemPrice: Number(initialSelectedItemData?.item_price),
   allAddedMods: [],
 };
@@ -46,11 +46,11 @@ const menuItemSlice = createSlice({
   reducers: {
     getMenuItemDetails: (
       state,
-      { payload }: PayloadAction<{ index: number }>
+      { payload }: PayloadAction<{ itemId: number }>
     ) => {
-      state.itemIndex = payload.index;
+      state.itemId = payload.itemId;
       let menuItem = state.menuData?.menuItems.find(
-        (_, i) => i === payload.index
+        (x) => x.itemid === payload.itemId
       ) as ICartItem;
       if (menuItem) {
         menuItem = {

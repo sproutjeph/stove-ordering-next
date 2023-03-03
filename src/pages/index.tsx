@@ -64,6 +64,18 @@ export default function Home() {
     [{ menu_name: "All Items", menucat: 1111, sortorder: 0 }]
   );
 
+  const menuCategoryInfo = menuData?.menuCat?.map((item) => ({
+    id: item.menucat,
+    text: item.menu_name,
+    numberOfItems: menuData.menuItems.filter(
+      (item2) => item2.menucatid === item.menucat
+    ).length,
+    items: menuData.menuItems.filter(
+      (item2) => item2.menucatid === item.menucat
+    ),
+  }));
+  console.log(menuCategoryInfo);
+
   return (
     <>
       {isLoading ? (
@@ -140,7 +152,7 @@ export default function Home() {
               {/*End Search bar */}
 
               <ul className="flex items-center w-full gap-1 py-3 mt-4 overflow-x-scroll rounded-md intro-x bg-gray-50 ">
-                {categoryButtons.map((menuCat) => (
+                {categoryButtons?.map((menuCat) => (
                   <li key={menuCat.menucat} className="">
                     <button
                       className="w-32 py-1 text-white bg-gray-600 rounded-md hover:bg-black hover:text-white focus:bg-black"
@@ -156,25 +168,38 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+              {/* <h1 className="px-3 py-1 mx-3 mb-2 tracking-widest text-blue-200 bg-gray-800 rounded-md col-span-full intro-x w-fit">
+                {category.name}
+              </h1> */}
             </div>
 
             <div className="mt-10 ">
-              <h1 className="px-3 py-1 mx-3 mb-2 tracking-widest text-blue-200 bg-gray-800 rounded-md intro-x w-fit">
-                {category.name}
-              </h1>
-
               <ul className="grid grid-cols-1 gap-4 mx-3 md:grid-cols-3 intro-y">
-                {menuData?.menuItems
-                  .filter((x, _, arr) => {
-                    if (category.id === 1111) {
-                      return arr;
-                    } else {
-                      return x.menucatid === category.id;
-                    }
-                  })
-                  ?.map((menuItem, i) => (
-                    <MenuItem key={menuItem.itemid} item={menuItem} index={i} />
-                  ))}
+                {menuCategoryInfo.map((item, i) => {
+                  if (category.id === 1111) {
+                    return (
+                      <>
+                        {item.items.length > 0 && (
+                          <h1 className="px-3 py-1 mx-3 mb-2 tracking-widest text-blue-200 bg-gray-800 rounded-md col-span-full intro-x w-fit">
+                            {item.text}
+                          </h1>
+                        )}
+
+                        {item.items.map((item2, i2) => (
+                          <MenuItem
+                            key={item2.itemid}
+                            item={item2}
+                            index={i2}
+                          />
+                        ))}
+                      </>
+                    );
+                  } else if (item.id === category.id) {
+                    return item.items.map((item2, i2) => (
+                      <MenuItem key={item2.itemid} item={item2} index={i2} />
+                    ));
+                  }
+                })}
               </ul>
             </div>
           </main>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVenueData } from "@/utils/network";
 
-export function useVenueData(venueId: number = 23, terminalId: number = 23) {
+export function useVenueData(venueId: number = 1, terminalId: number = 1) {
   const {
     data: venueData,
     isSuccess,

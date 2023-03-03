@@ -23,20 +23,21 @@ const MenuItem = ({ item, index }: IProps) => {
       <article
         className="relative shadow-sm cursor-pointer group rounded-t-md bg-blue-50 intro-x"
         onClick={() => {
-          localStorage.setItem("itemIndex", JSON.stringify(index));
-          dispatch(getMenuItemDetails({ index }));
-          router.push(`/menuitem-details/${index}`);
+          localStorage.setItem("itemId", JSON.stringify(item.itemid));
+          dispatch(getMenuItemDetails({ itemId: item.itemid }));
+          router.push(`/menuitem-details/${item.itemid}`);
         }}
       >
         <Image
           src={images.ItemImage4}
           alt=""
           className="object-cover w-full rounded-sm h-52"
+          loading="lazy"
         />
         <div className="grid grid-cols-2 px-4 py-2">
-          <h4 className="col-span-2 mt-2 mb-2 text-lg">{item.item_name}</h4>
+          <h4 className="col-span-2 mt-2 mb-2 text-lg">{item?.item_name}</h4>
           <FaHeart className="text-blue-500" />
-          <h4 className="ml-auto text-lg font-bold">$ {item.item_price}</h4>
+          <h4 className="ml-auto text-lg font-bold">$ {item?.item_price}</h4>
         </div>
         <div
           className="absolute p-3 text-gray-300 bg-blue-500 rounded-full opacity-0 cursor-pointer right-4 top-36 group-hover:opacity-100 "

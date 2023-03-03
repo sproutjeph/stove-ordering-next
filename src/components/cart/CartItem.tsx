@@ -62,7 +62,7 @@ const CartItem = ({ item, index }: IProps) => {
 
         <td className="w-40 p-4 text-center">
           <div className="flex flex-col w-40 h-20 mx-auto overflow-y-scroll gap-y-2 scrollbar-hide">
-            {item.addedModifiers?.map((mod) => (
+            {item.addedModifiers?.map((mod, i) => (
               <div
                 className="flex items-center justify-between gap-2 px-2 text-xs border rounded-md "
                 key={mod.id}
@@ -73,14 +73,18 @@ const CartItem = ({ item, index }: IProps) => {
                   <div
                     className="p-1 text-white bg-red-400 cursor-pointer"
                     onClick={() => {
-                      dispatch(
-                        removeModifier({
-                          modId: mod.id,
-                          price: mod?.price!,
-                          index,
-                        })
-                      );
-                      dispatch(calculateTotals());
+                      if (isEditing) {
+                        dispatch(
+                          removeModifier({
+                            modId: mod.id,
+                            price: mod?.price!,
+                            modIndex: i,
+                            itemId: item.itemid,
+                            itemIndex: index,
+                          })
+                        );
+                        dispatch(calculateTotals());
+                      }
                     }}
                   >
                     <FaTimes className="text-xs " />

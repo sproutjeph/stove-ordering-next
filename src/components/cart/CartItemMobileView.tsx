@@ -89,7 +89,7 @@ const CartItemMobileView = ({ item, index }: IProps) => {
         </div>
         <h6 className="mb-1 text-xs text-center">Added Items</h6>
         <ul className="grid grid-cols-2 gap-1 p-2 text-xs capitalize border">
-          {item.addedModifiers?.map((mod) => {
+          {item.addedModifiers?.map((mod, i) => {
             return (
               <div
                 key={mod.id}
@@ -99,15 +99,19 @@ const CartItemMobileView = ({ item, index }: IProps) => {
                   <div
                     className="absolute grid w-4 h-4 bg-red-400 rounded-full -right-3 -top-1 place-items-center"
                     onClick={() => {
-                      dispatch(
-                        removeModifier({
-                          modId: mod.id,
-                          price: mod?.price!,
-                          index,
-                        })
-                      );
+                      if (isEditing) {
+                        dispatch(
+                          removeModifier({
+                            modId: mod.id,
+                            price: mod?.price!,
+                            modIndex: i,
+                            itemId: item.itemid,
+                            itemIndex: index,
+                          })
+                        );
 
-                      dispatch(calculateTotals());
+                        dispatch(calculateTotals());
+                      }
                     }}
                   >
                     <FaTimes className="text-white" />

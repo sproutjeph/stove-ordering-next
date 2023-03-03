@@ -74,15 +74,24 @@ const cartSlice = createSlice({
       state,
       {
         payload,
-      }: PayloadAction<{ modId: string; price: number; index: number }>
+      }: PayloadAction<{
+        modId: string;
+        price: number;
+        modIndex: number;
+        itemId: number;
+        itemIndex: number;
+      }>
     ) => {
-      state.cartItems.forEach((item) => {
+      state.cartItems.forEach((item, i) => {
         item.addedModifiers = item.addedModifiers?.filter(
-          (mod) => mod.id !== payload.modId
+          (mod, j) =>
+            mod.id !== payload.modId ||
+            i !== payload.itemIndex ||
+            j !== payload.modIndex
         );
       });
       const currentItem = state.cartItems.find(
-        (item, i) => i === payload.index
+        (item, i) => i === payload.itemIndex && item.itemid === payload.itemId
       );
       if (currentItem) {
         currentItem.item_price = String(

@@ -3,12 +3,12 @@ import {
   decreaseItem,
   calculateTotalsInMenuItemsDetails,
 } from "@/featuers/menuItemDetails/menuItemDetailsSlice";
-import { FaCheck, FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { addToCart, calculateTotals } from "@/featuers/cart/cartSlice";
+import { FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useVenueData } from "@/queryHooks/useVenueData";
-import { ICartItem, ReturnData } from "@/utils/types";
+import { ICartItem } from "@/utils/types";
 import { VenueData } from "@/utils/types";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -27,12 +27,14 @@ type VenueNetworkData = {
 };
 
 const MenuItemDetailsPage = ({ id }: IProps) => {
-  const { venueData, isLoading, isSuccess }: VenueNetworkData = useVenueData();
+  const { venueData }: VenueNetworkData = useVenueData();
 
   const { selectedItemData, totalItemPrice } = useAppSelector(
     (state) => state.menuItemDetails
   );
-  const [selectedItem, setSelectedItem] = useState<ICartItem>();
+  const [selectedItem, setSelectedItem] = useState<ICartItem>(
+    selectedItemData!
+  );
   const [selectedItemTotalPrice, setSelectedItemTotalPrice] =
     useState<number>();
 
@@ -119,7 +121,7 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
                 ))}
               </select>
             ) : (
-              selectedItem?.itemOptions_json?.[0]?.options?.map((mod) => (
+              selectedItem?.itemOptions_json?.[0]?.options?.map((mod, i) => (
                 <ModItem mod={mod} key={mod.id} />
               ))
             )}
