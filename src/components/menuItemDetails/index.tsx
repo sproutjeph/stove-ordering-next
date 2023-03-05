@@ -28,16 +28,23 @@ type VenueNetworkData = {
 
 const MenuItemDetailsPage = ({ id }: IProps) => {
   const { venueData }: VenueNetworkData = useVenueData();
-
   const { selectedItemData, totalItemPrice } = useAppSelector(
     (state) => state.menuItemDetails
   );
   const [selectedItem, setSelectedItem] = useState<ICartItem>(
     selectedItemData!
   );
-  const [selectedItemTotalPrice, setSelectedItemTotalPrice] =
-    useState<number>();
+  const [selectedItemTotalPrice, setSelectedItemTotalPrice] = useState<number>(
+    Number(selectedItem.item_price)
+  );
 
+  useEffect(() => {
+    dispatch(calculateTotalsInMenuItemsDetails());
+  }, []);
+
+  useEffect(() => {
+    setSelectedItemTotalPrice(totalItemPrice);
+  }, [id, totalItemPrice, selectedItemTotalPrice]);
   useEffect(() => {
     if (selectedItemData) {
       setSelectedItem(selectedItemData);
@@ -111,10 +118,10 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
                 <option value="" className="bg-blue-100 border">
                   Select {selectedItem?.itemOptions_json?.[0]?.name}
                 </option>
-                {selectedItem?.itemOptions_json?.[0].options?.map((mod) => (
+                {selectedItem?.itemOptions_json?.[0].options?.map((mod, i) => (
                   <option
                     value={[mod.id, mod.name, String(mod.price)]}
-                    key={mod.id}
+                    key={mod.id + mod.name}
                   >
                     {mod.name}
                   </option>
@@ -122,7 +129,7 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
               </select>
             ) : (
               selectedItem?.itemOptions_json?.[0]?.options?.map((mod, i) => (
-                <ModItem mod={mod} key={mod.id} />
+                <ModItem mod={mod} key={mod.id + mod.name} />
               ))
             )}
 
@@ -130,15 +137,15 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
               {selectedItem?.itemOptions_json?.[1]?.name}
             </h4>
 
-            {selectedItem?.itemOptions_json?.[1]?.options?.map((mod) => (
-              <ModItem mod={mod} key={mod.id} />
+            {selectedItem?.itemOptions_json?.[1]?.options?.map((mod, i) => (
+              <ModItem mod={mod} key={mod.id + mod.name} />
             ))}
 
             <h4 className="col-span-2 my-2 text-center bg-blue-100 border">
               {selectedItem?.itemOptions_json?.[2]?.name}
             </h4>
-            {selectedItem?.itemOptions_json?.[2]?.options?.map((mod) => (
-              <ModItem mod={mod} key={mod.id} />
+            {selectedItem?.itemOptions_json?.[2]?.options?.map((mod, i) => (
+              <ModItem mod={mod} key={mod.id + mod.name} />
             ))}
           </ul>
 
