@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { images } from "@/constants";
 import Image from "next/image";
-import { useEffect } from "react";
 
 type IProps = {
   item: MenuItem;

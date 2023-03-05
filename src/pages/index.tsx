@@ -10,6 +10,7 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Fragment } from "react";
 type MenuNetworkData = {
   menuData: ReturnData;
   isLoading: boolean;
@@ -202,7 +203,7 @@ export default function Home() {
                 {menuCategoryInfo?.map((item, i) => {
                   if (category.id === 1111) {
                     return (
-                      <>
+                      <Fragment key={item.id}>
                         {item.items.length > 0 && (
                           <h1 className="px-3 py-1 mx-3 mb-2 tracking-widest text-blue-200 bg-gray-800 rounded-md col-span-full intro-x w-fit">
                             {item.text}
@@ -216,7 +217,7 @@ export default function Home() {
                             index={i2}
                           />
                         ))}
-                      </>
+                      </Fragment>
                     );
                   } else if (item.id === category.id) {
                     return item.items?.map((item2, i2) => (

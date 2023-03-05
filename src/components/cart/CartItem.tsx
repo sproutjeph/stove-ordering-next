@@ -21,6 +21,8 @@ const CartItem = ({ item, index }: IProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useAppDispatch();
 
+  console.log(item.addedModifiers);
+
   return (
     <>
       <tr>
