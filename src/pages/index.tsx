@@ -1,5 +1,5 @@
 import { Loading, MenuItem, StoreInfoModal } from "@/components";
-import { FaArrowLeft, FaInfo, FaSearch } from "react-icons/fa";
+import { FaArrowLeft, FaArrowUp, FaInfo, FaSearch } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useVenueData } from "@/queryHooks/useVenueData";
 import { useMenuItem } from "@/queryHooks/useMenuItem";
@@ -57,6 +57,24 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const [scrollPositon, setScrollPosition] = useState(false);
+  useEffect(() => {
+    const handleScrollPosition = () => {
+      setScrollPosition(window.scrollY > 500);
+    };
+
+    window.addEventListener("scroll", handleScrollPosition);
+    return () => window.removeEventListener("scroll", handleScrollPosition);
+  }, []);
+
+  const isBrowser = () => typeof window !== "undefined";
+
+  function scrollToTop() {
+    if (!isBrowser()) return;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   const [category, setCategory] = useState({ id: 1111, name: "All Items" });
 
   function searchHandler() {
@@ -97,7 +115,7 @@ export default function Home() {
             />
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <main className="">
+          <main className="relative">
             <h1 className="p-2 text-2xl tracking-wider text-center capitalize bg-black">
               <span className="text-blue-200">{`${venueData?.[0].venuename}'s Menu`}</span>
             </h1>
@@ -208,6 +226,14 @@ export default function Home() {
                 })}
               </ul>
             </div>
+            {scrollPositon && (
+              <button
+                className="fixed p-4 text-gray-300 bg-blue-500 rounded-full right-2 bottom-2"
+                onClick={scrollToTop}
+              >
+                <FaArrowUp />
+              </button>
+            )}
           </main>
         </>
       )}
