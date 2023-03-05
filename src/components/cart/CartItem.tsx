@@ -21,8 +21,6 @@ const CartItem = ({ item, index }: IProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useAppDispatch();
 
-  console.log(item.addedModifiers);
-
   return (
     <>
       <tr>
@@ -67,7 +65,7 @@ const CartItem = ({ item, index }: IProps) => {
             {item.addedModifiers?.map((mod, i) => (
               <div
                 className="flex items-center justify-between gap-2 px-2 text-xs border rounded-md "
-                key={mod.id}
+                key={mod.id + mod.name}
               >
                 <h6>{mod.name}</h6>
                 <span>+${mod.price}</span>

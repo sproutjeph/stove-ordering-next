@@ -35,12 +35,12 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
     selectedItemData!
   );
   const [selectedItemTotalPrice, setSelectedItemTotalPrice] = useState<number>(
-    Number(selectedItem.item_price)
+    Number(selectedItem?.item_price)
   );
 
   useEffect(() => {
     dispatch(calculateTotalsInMenuItemsDetails());
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setSelectedItemTotalPrice(totalItemPrice);

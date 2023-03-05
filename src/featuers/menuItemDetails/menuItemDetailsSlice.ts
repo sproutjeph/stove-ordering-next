@@ -83,17 +83,19 @@ const menuItemSlice = createSlice({
       { payload }: PayloadAction<{ modifier: Option }>
     ) => {
       const exists = state.allAddedMods.find(
-        (mod) => mod.id === payload.modifier.id
+        (mod) =>
+          mod.id + mod.name === payload.modifier.id + payload.modifier.name
       );
       if (exists) {
         state.allAddedMods = state.allAddedMods.filter(
-          (mod) => mod.id !== payload.modifier.id
+          (mod) =>
+            mod.id + mod.name !== payload.modifier.id + payload.modifier.name
         );
       } else {
-        state.allAddedMods.push(payload.modifier);
+        state.selectedItemData!.addedModifiers!.push(payload.modifier);
       }
 
-      state.selectedItemData!.addedModifiers = state.allAddedMods;
+      // state.selectedItemData!.addedModifiers = state.allAddedMods;
 
       if (payload.modifier.isSelected) {
         state.totalItemPrice =

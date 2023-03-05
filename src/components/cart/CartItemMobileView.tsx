@@ -92,7 +92,7 @@ const CartItemMobileView = ({ item, index }: IProps) => {
           {item.addedModifiers?.map((mod, i) => {
             return (
               <div
-                key={mod.id + i}
+                key={mod.id + mod.name}
                 className="relative p-1 border cursor-pointer w-fit"
               >
                 {isEditing && (
