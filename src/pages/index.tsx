@@ -118,7 +118,7 @@ export default function Home() {
           </Head>
           <main className="relative">
             <h1 className="p-2 text-2xl tracking-wider text-center capitalize bg-black">
-              <span className="text-blue-200">{`${venueData?.[0].venuename}'s Menu`}</span>
+              <span className="text-blue-200">{`${venueData?.[0]?.venuename}'s Menu`}</span>
             </h1>
             <div className="w-full h-24 ">
               <Image
@@ -188,7 +188,7 @@ export default function Home() {
                         })
                       }
                     >
-                      {menuCat.menu_name}
+                      {menuCat?.menu_name}
                     </button>
                   </li>
                 ))}
