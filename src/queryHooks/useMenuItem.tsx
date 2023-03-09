@@ -9,7 +9,7 @@ export function useMenuItem(
     data: menuData,
     isSuccess,
     isLoading,
-  } = useQuery(["menuItems"], () => getMenuData(venueId, timeZone), {
+  } = useQuery(["menuItems", venueId], () => getMenuData(venueId, timeZone), {
     staleTime: 2400000, // 40 mins to refetch
     cacheTime: 3600000, // 30 mins for cache data
     refetchOnWindowFocus: false,
