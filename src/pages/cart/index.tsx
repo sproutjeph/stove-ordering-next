@@ -11,8 +11,6 @@ const CartPage = () => {
     (state) => state.cart
   );
 
-  console.log(selectedItemData?.addedModifiers);
-
   return (
     <>
       <div className="px-3 mx-auto mt-24 mb-8 max-w-7xl">
@@ -44,7 +42,7 @@ const CartPage = () => {
         <button
           className="flex items-center gap-2 my-4 text-sm "
           title="Back to Products"
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
         >
           <FaChevronLeft className="text-blue-500 " />
           <span>Continue Shopping</span>

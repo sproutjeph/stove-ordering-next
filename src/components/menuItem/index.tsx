@@ -1,4 +1,3 @@
-import { getMenuItemDetails } from "@/featuers/menuItemDetails/menuItemDetailsSlice";
 import { addToCart, calculateTotals } from "@/featuers/cart/cartSlice";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { useAppDispatch } from "@/store/hooks";
@@ -22,9 +21,10 @@ const MenuItem = ({ item, index }: IProps) => {
       <article
         className="relative shadow-sm cursor-pointer group rounded-t-md bg-blue-50 intro-x"
         onClick={() => {
-          localStorage.setItem("itemId", JSON.stringify(item.itemid));
-          dispatch(getMenuItemDetails({ itemId: item.itemid }));
-          router.push(`/menuitem-details/${item.itemid}`);
+          router.push({
+            pathname: `${router.basePath}/menuitem-details/${item.itemid}`,
+            query: { venueId: router.query.venueId },
+          });
         }}
       >
         <Image

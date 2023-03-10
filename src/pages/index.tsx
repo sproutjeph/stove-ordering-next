@@ -5,11 +5,11 @@ import { useVenueData } from "@/queryHooks/useVenueData";
 import { useMenuItem } from "@/queryHooks/useMenuItem";
 import { ReturnData, VenueData } from "@/utils/types";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { images } from "@/constants";
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Fragment } from "react";
 type MenuNetworkData = {
   menuData: ReturnData;
@@ -39,12 +39,6 @@ export default function Home() {
     isLoading: venueDataLoading,
     isSuccess: venueDataIsSuccess,
   }: VenueNetworkData = useVenueData(vId, vId);
-
-  useEffect(() => {
-    if (isSuccess) {
-      localStorage.setItem("menuItemData", JSON.stringify(menuData));
-    }
-  }, [menuData, isSuccess]);
 
   const dispatch = useAppDispatch();
   const [searchInput, setSearchInput] = useState("");

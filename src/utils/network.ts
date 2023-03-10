@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { IUserLogin } from "./types";
+import { ReturnData, MenuItem } from "./types";
 const baseURL = "https://external.stovepos.com/sys/";
 
 const config: AxiosRequestConfig = { baseURL };
@@ -29,4 +30,13 @@ export async function loginUser(userLoginData: IUserLogin) {
   );
 
   return userData;
+}
+
+export function getMenuItem(
+  menuData: ReturnData,
+  menuItemId: number
+): MenuItem | undefined {
+  const { menuItems } = menuData;
+
+  return menuItems.find((item: any) => item.id === menuItemId);
 }

@@ -2,13 +2,15 @@ import {
   increaseItem,
   decreaseItem,
   calculateTotalsInMenuItemsDetails,
+  getMenuItemDetails,
 } from "@/featuers/menuItemDetails/menuItemDetailsSlice";
 import { addToCart, calculateTotals } from "@/featuers/cart/cartSlice";
 import { FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useVenueData } from "@/queryHooks/useVenueData";
-import { ICartItem } from "@/utils/types";
+import { useMenuItem } from "@/queryHooks/useMenuItem";
+import { ICartItem, ReturnData } from "@/utils/types";
 import { VenueData } from "@/utils/types";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -26,8 +28,30 @@ type VenueNetworkData = {
   isSuccess: boolean;
 };
 
+type MenuNetworkData = {
+  menuData: ReturnData;
+  isLoading: boolean;
+  isSuccess: boolean;
+};
+
 const MenuItemDetailsPage = ({ id }: IProps) => {
-  const { venueData }: VenueNetworkData = useVenueData();
+  const router = useRouter();
+  const { venueId } = router.query;
+  const [vId, setVid] = useState<number>();
+  useEffect(() => {
+    setVid(Number(venueId));
+  }, [venueId]);
+  const { venueData }: VenueNetworkData = useVenueData(vId);
+  const { menuData, isLoading, isSuccess }: MenuNetworkData = useMenuItem(vId);
+
+  const currentItem = menuData?.menuItems?.find(
+    (item) => item.itemid === Number(id)
+  ) as ICartItem;
+
+  useEffect(() => {
+    dispatch(getMenuItemDetails({ currentItem: currentItem }));
+  }, [id, currentItem]);
+
   const { selectedItemData, totalItemPrice } = useAppSelector(
     (state) => state.menuItemDetails
   );
@@ -43,19 +67,16 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
   }, [id]);
 
   useEffect(() => {
-    setSelectedItemTotalPrice(totalItemPrice);
+    setSelectedItemTotalPrice(totalItemPrice!);
   }, [id, totalItemPrice, selectedItemTotalPrice]);
   useEffect(() => {
     if (selectedItemData) {
       setSelectedItem(selectedItemData);
     }
-    setSelectedItemTotalPrice(totalItemPrice);
-  }, [selectedItem, selectedItemData, id, totalItemPrice]);
+    setSelectedItemTotalPrice(totalItemPrice!);
+  }, [selectedItem, selectedItemData, id, totalItemPrice, venueId]);
 
-  const router = useRouter();
   const dispatch = useAppDispatch();
-
-  // console.log(selectedItemData);
 
   function modSelectHandler(e: ChangeEvent<HTMLSelectElement>) {
     const [id, name, price] = e.target.value.split(",");
@@ -75,7 +96,7 @@ const MenuItemDetailsPage = ({ id }: IProps) => {
       <div
         className="flex items-center gap-1 mx-auto mt-24 text-gray-500 cursor-pointer max-w-7xl"
         onClick={() => {
-          router.push("/");
+          router.back();
         }}
       >
         <FaChevronLeft />

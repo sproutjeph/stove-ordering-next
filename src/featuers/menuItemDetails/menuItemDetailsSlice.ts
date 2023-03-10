@@ -1,42 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartItem, Option, ReturnData } from "@/utils/types";
 
-let data;
-let initialSelectedItemData;
-let initialItemId: string | null;
-if (typeof window !== "undefined") {
-  data = localStorage.getItem("menuItemData");
-  initialItemId = localStorage.getItem("itemId");
-}
-
-if (initialItemId!) {
-  initialItemId = JSON.parse(initialItemId);
-}
-
-if (data) {
-  let mData: ReturnData = JSON.parse(data);
-  initialSelectedItemData = mData.menuItems.find(
-    (item) => item.itemid === Number(initialItemId)
-  ) as ICartItem;
-}
-
 type MenuItemDetailsState = {
-  menuData: ReturnData;
-  selectedItemData?: ICartItem;
-  itemId: number;
-  totalItemPrice: number;
+  selectedItemData?: ICartItem | null;
+  totalItemPrice: number | null;
   allAddedMods: Option[];
 };
 
 const initialState: MenuItemDetailsState = {
-  menuData: data ? JSON.parse(data) : null,
-  selectedItemData: {
-    ...initialSelectedItemData,
-    qty: 1,
-    addedModifiers: [],
-  } as ICartItem,
-  itemId: Number(initialItemId!),
-  totalItemPrice: Number(initialSelectedItemData?.item_price),
+  selectedItemData: null,
+  totalItemPrice: null,
   allAddedMods: [],
 };
 
@@ -46,20 +19,18 @@ const menuItemSlice = createSlice({
   reducers: {
     getMenuItemDetails: (
       state,
-      { payload }: PayloadAction<{ itemId: number }>
+      { payload }: PayloadAction<{ currentItem: ICartItem }>
     ) => {
-      state.itemId = payload.itemId;
-      let menuItem = state.menuData?.menuItems.find(
-        (x) => x.itemid === payload.itemId
-      ) as ICartItem;
-      if (menuItem) {
-        menuItem = {
-          ...menuItem,
+      let item = payload.currentItem;
+      if (item) {
+        item = {
+          ...item,
           qty: 1,
           addedModifiers: [],
         };
       }
-      state.selectedItemData = menuItem;
+      state.selectedItemData = item;
+      state.totalItemPrice = Number(item?.item_price);
     },
 
     increaseItem: (state) => {
@@ -92,19 +63,19 @@ const menuItemSlice = createSlice({
             mod.id + mod.name !== payload.modifier.id + payload.modifier.name
         );
       } else {
-        state.selectedItemData!.addedModifiers!.push(payload.modifier);
+        state.selectedItemData?.addedModifiers!.push(payload.modifier);
       }
 
       // state.selectedItemData!.addedModifiers = state.allAddedMods;
 
       if (payload.modifier.isSelected) {
         state.totalItemPrice =
-          state.totalItemPrice + Number(payload.modifier.price);
+          state.totalItemPrice! + Number(payload.modifier.price);
 
         state.selectedItemData!.item_price = String(state.totalItemPrice);
       } else {
         state.totalItemPrice =
-          state.totalItemPrice - Number(payload.modifier.price);
+          state.totalItemPrice! - Number(payload.modifier.price);
         state.selectedItemData!.item_price = String(state.totalItemPrice);
       }
 
