@@ -32,7 +32,7 @@ export default function Home() {
   }, [venueId]);
   console.log(venueId);
 
-  const { menuData, isLoading, isSuccess }: MenuNetworkData = useMenuItem();
+  const { menuData, isLoading, isSuccess }: MenuNetworkData = useMenuItem(vId);
 
   const {
     venueData,
