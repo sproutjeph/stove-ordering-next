@@ -10,8 +10,10 @@ import { useVenueData } from "@/queryHooks/useVenueData";
 import RestaurantLogo from "../restaurantLogo";
 import { VenueData } from "@/utils/types";
 import { FaTimes } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarItem from "./SidebarItem";
+import { useRouter } from "next/router";
+
 import Link from "next/link";
 
 type VenueNetworkData = {
@@ -21,7 +23,15 @@ type VenueNetworkData = {
 };
 
 const Sidebar = () => {
-  const { venueData, isLoading, isSuccess }: VenueNetworkData = useVenueData();
+  const router = useRouter();
+
+  const { venueId } = router.query;
+  const [vId, setVid] = useState<number>();
+  useEffect(() => {
+    setVid(Number(venueId));
+  }, [venueId]);
+  const { venueData, isLoading, isSuccess }: VenueNetworkData =
+    useVenueData(vId);
 
   const dispatch = useAppDispatch();
   const { isSidebarOpen } = useAppSelector((state) => state.sidebar);
@@ -34,7 +44,7 @@ const Sidebar = () => {
         }`}
       >
         <div className="flex justify-between gap-2 pl-3">
-          <RestaurantLogo restaurantName={venueData?.[0]?.venuename} />
+          <RestaurantLogo restaurantName={venueData?.[0]?.venuename || " "} />
           <FaTimes
             className="mr-4 text-2xl text-red-300 cursor-pointer"
             onClick={() => {

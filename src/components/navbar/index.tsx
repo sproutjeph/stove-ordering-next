@@ -6,7 +6,7 @@ import { VenueData } from "@/utils/types";
 import { BsCart4 } from "react-icons/bs";
 import { FaBars } from "react-icons/fa";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 type VenueNetworkData = {
@@ -16,9 +16,15 @@ type VenueNetworkData = {
 };
 
 const Navbar = () => {
-  const { venueData, isLoading, isSuccess }: VenueNetworkData = useVenueData();
-
   const router = useRouter();
+  const { venueId } = router.query;
+  const [vId, setVid] = useState<number>();
+  useEffect(() => {
+    setVid(Number(venueId));
+  }, [venueId]);
+
+  const { venueData, isLoading, isSuccess }: VenueNetworkData =
+    useVenueData(vId);
 
   const { totalCartItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
@@ -65,7 +71,7 @@ const Navbar = () => {
 
           <div className="md:hidden">
             <h1 className="text-xl text-blue-500">
-              {venueData?.[0]?.venuename}
+              {venueData?.[0]?.venuename || " "}
             </h1>
           </div>
 

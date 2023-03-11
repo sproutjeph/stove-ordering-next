@@ -1,3 +1,4 @@
+export { default as MenuItemSkeleton } from "./loadingSkeleton/MenuItemSkeleton";
 export { default as CartItemMobileView } from "./cart/CartItemMobileView";
 export { default as MenuItemDetails } from "./menuItemDetails";
 export { default as RestaurantLogo } from "./restaurantLogo";
